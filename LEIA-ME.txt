@@ -1,0 +1,31 @@
+RENDA NA PRÁTICA — PRIMEIRA VERSÃO
+
+ARQUIVOS
+- index.html: página inicial e ferramentas.
+- style.css: aparência e layout responsivo.
+- script.js: menu, busca e calculadoras.
+- sobre.html, privacidade.html, termos.html, contato.html: páginas institucionais.
+
+COMO TESTAR NO CELULAR
+1. Baixe e extraia o ZIP.
+2. Abra os arquivos em seu editor (por exemplo, Spck).
+3. Abra index.html na visualização do editor ou publique no GitHub Pages.
+
+COMO PUBLICAR GRATUITAMENTE NO GITHUB PAGES
+1. Entre em github.com e crie um repositório público, por exemplo: renda-na-pratica.
+2. Envie todos os arquivos desta pasta para a raiz do repositório.
+3. No repositório, vá em Settings > Pages.
+4. Em Build and deployment, selecione Deploy from a branch.
+5. Escolha a branch main e a pasta /(root), salve e aguarde a publicação.
+6. O GitHub mostrará o endereço publicado nas configurações de Pages.
+
+IMPORTANTE
+- Esta é a primeira versão estática. Não existe painel administrativo conectado nem banco de dados.
+- Os links Hotmart e Kiwify são links públicos informativos, NÃO são links de afiliado personalizados.
+- Para usar seus links, edite index.html e substitua os hrefs pelos links fornecidos oficialmente nas suas contas de afiliado.
+- Não invente nem encurte links de afiliado; copie o link correto da plataforma.
+- Para ter painel administrativo com alterações públicas, será necessário integrar um backend ou CMS. O localStorage não seria suficiente.
+- O site ainda não tem domínio próprio. Domínio .com.br normalmente exige registro pago.
+- Revise os textos legais conforme os serviços que instalar e as leis aplicáveis.
+- A busca inicial pesquisa os cartões e textos que já existem no site; não é uma pesquisa na internet.
+- A calculadora fornece estimativas e não promete ganhos.

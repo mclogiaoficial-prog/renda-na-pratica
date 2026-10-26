@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ferramentas gratuitas, ideias de renda extra e oportunidades online com informação transparente.">
+  <meta name="theme-color" content="#102b24">
+  <title>Renda na Prática | Oportunidades reais, sem promessas falsas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Renda na Prática - início">
+      <span class="brand-icon">↗</span>
+      <span><strong>Renda na Prática</strong><small>SEM PROMESSAS FALSAS</small></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <nav id="mainNav">
+      <a href="#ferramentas">Ferramentas</a>
+      <a href="#oportunidades">Oportunidades</a>
+      <a href="#recomendados">Recomendados</a>
+      <a href="sobre.html">Sobre</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <span class="eyebrow">INFORMAÇÃO CLARA. DECISÕES MELHORES.</span>
+      <h1>Sua próxima oportunidade começa <span>aqui.</span></h1>
+      <p>Ferramentas gratuitas, ideias de renda extra e caminhos para começar com os pés no chão.</p>
+      <form class="search-bar" id="searchForm" role="search">
+        <span aria-hidden="true">⌕</span>
+        <input id="siteSearch" type="search" placeholder="O que você está procurando?" aria-label="Pesquisar no site">
+        <button type="submit">Pesquisar</button>
+      </form>
+      <div class="trust-line"><span>✓</span> Sem dinheiro fácil garantido. Só informação transparente.</div>
+    </section>
+
+    <section class="section" id="ferramentas">
+      <div class="section-heading">
+        <div><span class="eyebrow">USE AGORA</span><h2>Ferramentas gratuitas</h2></div>
+        <p>Pequenas ferramentas para ajudar você a planejar e organizar sua renda.</p>
+      </div>
+      <div class="tool-grid">
+        <article class="tool-card searchable" data-search="calculadora lucro renda extra despesas ganhos dinheiro">
+          <div class="tool-icon green">▤</div>
+          <h3>Calculadora de lucro</h3>
+          <p>Descubra quanto sobra depois de descontar os custos.</p>
+          <button class="text-button" data-scroll="#calculadora">Calcular agora <span>→</span></button>
+        </article>
+        <article class="tool-card searchable" data-search="controle renda semanal mensal orçamento organização">
+          <div class="tool-icon yellow">◷</div>
+          <h3>Meta de renda</h3>
+          <p>Calcule quanto precisa guardar ou ganhar por dia.</p>
+          <button class="text-button" data-scroll="#meta">Planejar meta <span>→</span></button>
+        </article>
+        <article class="tool-card searchable" data-search="ideias trabalho celular internet iniciante">
+          <div class="tool-icon blue">⌘</div>
+          <h3>Ideias para iniciantes</h3>
+          <p>Conheça caminhos para começar usando o celular.</p>
+          <a class="text-button" href="#oportunidades">Ver possibilidades <span>→</span></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section calculator-section" id="calculadora">
+      <div class="section-heading">
+        <div><span class="eyebrow">CALCULADORA GRATUITA</span><h2>Quanto você realmente lucra?</h2></div>
+        <p>Preencha os valores. O cálculo acontece no seu navegador.</p>
+      </div>
+      <div class="calculator-card">
+        <div class="form-grid">
+          <label>Quanto recebeu (R$)<input id="revenue" type="number" min="0" step="0.01" placeholder="Ex.: 250"></label>
+          <label>Quanto gastou (R$)<input id="costs" type="number" min="0" step="0.01" placeholder="Ex.: 45"></label>
+        </div>
+        <button id="calcProfit" class="primary-button">Calcular meu lucro</button>
+        <div class="result-panel" id="profitResult" aria-live="polite"><span>Seu lucro estimado</span><strong>R$ 0,00</strong><small>Informe os valores acima para calcular.</small></div>
+        <p class="fine-print">Estimativa simples. Considere impostos, taxas, transporte e outros custos que se aplicarem à sua atividade.</p>
+      </div>
+    </section>
+
+    <section class="section" id="meta">
+      <div class="section-heading">
+        <div><span class="eyebrow">PLANEJAMENTO</span><h2>Transforme uma meta em um plano</h2></div>
+        <p>Veja quanto precisaria ganhar por dia para alcançar sua meta mensal.</p>
+      </div>
+      <div class="calculator-card">
+        <div class="form-grid">
+          <label>Meta mensal (R$)<input id="monthlyGoal" type="number" min="0" step="0.01" placeholder="Ex.: 600"></label>
+          <label>Dias disponíveis no mês<input id="workingDays" type="number" min="1" max="31" step="1" value="20"></label>
+        </div>
+        <button id="calcGoal" class="primary-button">Calcular meta diária</button>
+        <div class="result-panel" id="goalResult" aria-live="polite"><span>Meta por dia</span><strong>R$ 0,00</strong><small>Informe sua meta mensal.</small></div>
+      </div>
+    </section>
+
+    <section class="section" id="oportunidades">
+      <div class="section-heading">
+        <div><span class="eyebrow">CAMINHOS POSSÍVEIS</span><h2>Ideias de renda extra</h2></div>
+        <p>Cada caminho exige esforço, aprendizado e pode ter resultados diferentes.</p>
+      </div>
+      <div class="article-grid">
+        <article class="article-card searchable" data-search="serviços digitais freelancer digitação design edição vídeo currículo">
+          <span class="tag">COMEÇAR COM HABILIDADES</span><h3>Ofereça serviços digitais</h3>
+          <p>Você pode aprender a editar vídeos curtos, criar artes simples, formatar documentos ou montar currículos. Comece com exemplos do seu trabalho e deixe claro o que entrega.</p>
+          <p class="article-note">Pode exigir prática, portfólio e tempo para conseguir clientes.</p>
+        </article>
+        <article class="article-card searchable" data-search="afiliado vender produtos digitais comissão cursos ebooks">
+          <span class="tag">VENDAS ONLINE</span><h3>Trabalhe como afiliado</h3>
+          <p>Algumas plataformas permitem divulgar produtos de terceiros e receber comissão por vendas atribuídas ao seu link. Confira regras, taxas, reembolsos e reputação do produtor.</p>
+          <p class="article-note">Comissão não é garantida; divulgar não significa que haverá venda.</p>
+        </article>
+        <article class="article-card searchable" data-search="produto digital planilha ebook guia próprio vender">
+          <span class="tag">CRIAR ALGO SEU</span><h3>Crie um produto digital</h3>
+          <p>Planilhas, guias e modelos podem resolver problemas específicos. Converse com possíveis compradores antes de investir tempo em um produto grande.</p>
+          <p class="article-note">Valide se existe procura e ofereça conteúdo original.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section recommended-section" id="recomendados">
+      <div class="section-heading">
+        <div><span class="eyebrow">RECURSOS</span><h2>Plataformas para conhecer</h2></div>
+        <p>Confira os termos diretamente nos sites oficiais antes de se cadastrar.</p>
+      </div>
+      <div class="affiliate-notice"><strong>Transparência:</strong> alguns links desta área poderão ser links de afiliado. Se você comprar por um link afiliado, o site pode receber comissão, sem custo extra para você. Os links abaixo são páginas informativas, não links de afiliado personalizados.</div>
+      <div class="recommendation-list">
+        <article class="recommendation searchable" data-search="hotmart afiliado produto digital curso">
+          <div><h3>Hotmart</h3><p>Plataforma de produtos digitais. Consulte as condições de afiliação e as regras de cada produto.</p></div>
+          <a class="outline-button external-link" href="https://hotmart.com/pt-br/afiliados" target="_blank" rel="noopener noreferrer">Visitar site ↗</a>
+        </article>
+        <article class="recommendation searchable" data-search="kiwify afiliado produto digital">
+          <div><h3>Kiwify</h3><p>Plataforma para vendas de produtos digitais. Confira os recursos e as condições atuais.</p></div>
+          <a class="outline-button external-link" href="https://kiwify.com.br/" target="_blank" rel="noopener noreferrer">Visitar site ↗</a>
+        </article>
+      </div>
+      <p class="fine-print">A presença de uma plataforma aqui não significa garantia de renda nem endosso a todos os produtos oferecidos nela.</p>
+    </section>
+
+    <section class="cta-section">
+      <div><span class="eyebrow">UM PASSO DE CADA VEZ</span><h2>Desconfie de promessas de dinheiro fácil.</h2><p>Pesquise, compare as condições e nunca pague para alguém com a promessa de retorno garantido.</p></div>
+      <a href="sobre.html" class="light-button">Conheça o projeto</a>
+    </section>
+
+    <section id="noResults" class="no-results hidden" aria-live="polite">
+      <h2>Nenhum resultado encontrado</h2><p>Tente outra palavra, como “lucro”, “afiliado” ou “serviços”.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand footer-brand" href="index.html"><span class="brand-icon">↗</span><span><strong>Renda na Prática</strong><small>Oportunidades reais</small></span></a>
+    <p>Informação para ajudar você a tomar decisões melhores. Resultados financeiros variam e não são garantidos.</p>
+    <div class="footer-links"><a href="sobre.html">Sobre</a><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos de uso</a><a href="contato.html">Contato</a></div>
+    <small>© <span id="year"></span> Renda na Prática. Todos os direitos reservados.</small>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
