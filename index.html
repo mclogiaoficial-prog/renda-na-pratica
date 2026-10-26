@@ -173,6 +173,8 @@
   </footer>
   <script src="script.js"></script>
 
+
+
 <script type="module">
 import { createClient } from
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -197,7 +199,8 @@ async function carregarOportunidades() {
     lista.replaceChildren();
 
     if (!data || data.length === 0) {
-      lista.textContent = 'Novas oportunidades serão publicadas aqui.';
+      lista.textContent =
+        'Novas oportunidades serão publicadas aqui.';
       return;
     }
 
@@ -216,7 +219,8 @@ async function carregarOportunidades() {
       categoria.textContent = link.categoria || 'Outros';
 
       const descricao = document.createElement('p');
-      descricao.textContent = link.descricao || 'Confira esta oportunidade.';
+      descricao.textContent =
+        link.descricao || 'Confira esta oportunidade.';
 
       const botao = document.createElement('a');
       botao.className = 'outline-button';
@@ -225,13 +229,28 @@ async function carregarOportunidades() {
       botao.target = '_blank';
       botao.rel = 'noopener noreferrer sponsored';
 
+      botao.addEventListener('click', () => {
+        supabase
+          .from('link_clicks')
+          .insert({ link_id: link.id })
+          .then(({ error }) => {
+            if (error) {
+              console.error(
+                'Erro ao registrar clique:',
+                error.message
+              );
+            }
+          })
+          .catch(console.error);
+      });
+
       texto.append(titulo, categoria, descricao);
       card.append(texto, botao);
       lista.append(card);
     });
   } catch (erro) {
     lista.textContent =
-      'Não foi possível carregar as oportunidades agora. Tente novamente mais tarde.';
+      'Não foi possível carregar as oportunidades agora.';
     console.error('Erro ao carregar links:', erro);
   }
 }
