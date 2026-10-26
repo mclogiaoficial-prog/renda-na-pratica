@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Administração | Renda na Prática</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      color: #f8fafc;
+      background: #101827;
+    }
+    main {
+      width: 100%;
+      max-width: 420px;
+      padding: 28px;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      background: #1e293b;
+    }
+    h1 { margin-top: 0; font-size: 25px; }
+    p { color: #cbd5e1; line-height: 1.5; }
+    label { display: block; margin-top: 18px; }
+    input {
+      width: 100%;
+      margin-top: 8px;
+      padding: 13px;
+      border: 1px solid #475569;
+      border-radius: 8px;
+      color: #111827;
+      background: white;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      border: 0;
+      border-radius: 8px;
+      color: #111827;
+      background: #facc15;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; }
+    #mensagem { overflow-wrap: anywhere; }
+    .voltar { color: #fde68a; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Área administrativa</h1>
+    <p>Renda na Prática — entre com o e-mail e a senha do administrador.</p>
+
+    <form id="formLogin">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" autocomplete="username"
+        placeholder="Seu e-mail de administrador" required>
+
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" autocomplete="current-password"
+        placeholder="Sua senha" required>
+
+      <button id="entrar" type="submit">Entrar</button>
+    </form>
+
+    <p id="mensagem" role="status" aria-live="polite"></p>
+    <a class="voltar" href="./index.html">Voltar ao site</a>
+  </main>
+
+  <script type="module">
+    import { createClient } from
+      'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const SUPABASE_URL = 'https://fojqtnppgqibgmngeyxd.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY =
+      'sb_publishable__C2KwgOSgvhapX_Ig68GDQ_Qg4aWU6w';
+
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const form = document.getElementById('formLogin');
+    const botao = document.getElementById('entrar');
+    const mensagem = document.getElementById('mensagem');
+
+    form.addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+      botao.disabled = true;
+      mensagem.textContent = 'Verificando acesso...';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('senha').value;
+
+      try {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) throw error;
+
+        mensagem.textContent =
+          'Login realizado. O painel de gerenciamento será configurado na próxima etapa.';
+      } catch (erro) {
+        mensagem.textContent =
+          'Não foi possível entrar. Confira o e-mail e a senha e tente novamente.';
+      } finally {
+        botao.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
