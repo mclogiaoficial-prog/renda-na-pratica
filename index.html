@@ -137,6 +137,24 @@
       <p class="fine-print">A presença de uma plataforma aqui não significa garantia de renda nem endosso a todos os produtos oferecidos nela.</p>
     </section>
 
+<section class="section" id="linksAdministrativos">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">RECOMENDADOS</span>
+      <h2>Novas oportunidades</h2>
+    </div>
+    <p>Links selecionados para ajudar você a conhecer novas ferramentas e oportunidades.</p>
+  </div>
+
+  <div class="recommendation-list" id="listaPublica">
+    <p>Carregando oportunidades...</p>
+  </div>
+
+  <p class="fine-print">
+    Alguns links podem ser afiliados. Confira as condições diretamente no site indicado.
+  </p>
+</section>
+
     <section class="cta-section">
       <div><span class="eyebrow">UM PASSO DE CADA VEZ</span><h2>Desconfie de promessas de dinheiro fácil.</h2><p>Pesquise, compare as condições e nunca pague para alguém com a promessa de retorno garantido.</p></div>
       <a href="sobre.html" class="light-button">Conheça o projeto</a>
@@ -154,5 +172,72 @@
     <small>© <span id="year"></span> Renda na Prática. Todos os direitos reservados.</small>
   </footer>
   <script src="script.js"></script>
+
+<script type="module">
+import { createClient } from
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const supabase = createClient(
+  'https://fojqtnppgqibgmngeyxd.supabase.co',
+  'sb_publishable__C2KwgOSgvhapX_Ig68GDQ_Qg4aWU6w'
+);
+
+const lista = document.getElementById('listaPublica');
+
+async function carregarOportunidades() {
+  try {
+    const { data, error } = await supabase
+      .from('links')
+      .select('id, titulo, descricao, url, categoria')
+      .eq('ativo', true)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    lista.replaceChildren();
+
+    if (!data || data.length === 0) {
+      lista.textContent = 'Novas oportunidades serão publicadas aqui.';
+      return;
+    }
+
+    data.forEach(link => {
+      const card = document.createElement('article');
+      card.className = 'recommendation searchable';
+      card.dataset.search =
+        `${link.titulo} ${link.descricao || ''} ${link.categoria || ''}`;
+
+      const texto = document.createElement('div');
+
+      const titulo = document.createElement('h3');
+      titulo.textContent = link.titulo;
+
+      const categoria = document.createElement('p');
+      categoria.textContent = link.categoria || 'Outros';
+
+      const descricao = document.createElement('p');
+      descricao.textContent = link.descricao || 'Confira esta oportunidade.';
+
+      const botao = document.createElement('a');
+      botao.className = 'outline-button';
+      botao.textContent = 'Conhecer oportunidade ↗';
+      botao.href = link.url;
+      botao.target = '_blank';
+      botao.rel = 'noopener noreferrer sponsored';
+
+      texto.append(titulo, categoria, descricao);
+      card.append(texto, botao);
+      lista.append(card);
+    });
+  } catch (erro) {
+    lista.textContent =
+      'Não foi possível carregar as oportunidades agora. Tente novamente mais tarde.';
+    console.error('Erro ao carregar links:', erro);
+  }
+}
+
+carregarOportunidades();
+</script>
+
 </body>
 </html>
