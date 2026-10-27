@@ -15,6 +15,7 @@ h1{color:#facc15}
 label{display:block;margin-top:12px}
 input,textarea,select{display:block;width:100%;margin-top:6px;padding:12px;border-radius:7px;border:1px solid #64748b;font-size:16px}
 button{padding:11px 14px;margin:8px 5px 0 0;border:0;border-radius:7px;background:#facc15;color:#111827;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6}
 button.danger{background:#f87171}
 button.secondary{background:#cbd5e1}
 .item{padding:14px 0;border-bottom:1px solid #475569;overflow-wrap:anywhere}
@@ -22,6 +23,11 @@ small,.muted{color:#cbd5e1}
 .hidden{display:none!important}
 a{color:#fde68a}
 #msg{overflow-wrap:anywhere}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.stat{background:#101827;border:1px solid #475569;border-radius:10px;padding:16px}
+.stat strong{display:block;color:#facc15;font-size:28px;margin-top:8px;overflow-wrap:anywhere}
+.click-row{padding:12px 0;border-bottom:1px solid #475569;display:flex;justify-content:space-between;gap:12px}
+.click-count{font-size:20px;font-weight:bold;color:#facc15;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -41,6 +47,28 @@ a{color:#fde68a}
 </section>
 
 <section id="painel" class="hidden">
+
+<div class="card">
+<h2>Estatísticas de cliques</h2>
+<p class="muted">Quantidade de cliques registrados nos links do site.</p>
+
+<div class="stat-grid">
+  <div class="stat">
+    Total de cliques
+    <strong id="totalCliques">—</strong>
+  </div>
+  <div class="stat">
+    Oportunidade mais acessada
+    <strong id="maisAcessado" style="font-size:18px">—</strong>
+  </div>
+</div>
+
+<button id="atualizarCliques">Atualizar estatísticas</button>
+<p id="msgCliques" class="muted" role="status"></p>
+<h3>Cliques por oportunidade</h3>
+<div id="listaCliques">Carregando estatísticas...</div>
+</div>
+
 <div class="card">
 <h2>Gerenciar links</h2>
 <p class="muted">Cadastre links de afiliados e escolha a categoria.</p>
@@ -72,6 +100,7 @@ a{color:#fde68a}
 <button id="atualizarBtn" class="secondary">Atualizar lista</button>
 <div id="lista"></div>
 </div>
+
 <button id="sairBtn" class="secondary">Sair</button>
 </section>
 
@@ -105,6 +134,7 @@ async function verificarSessao(){
  if(user && user.email?.toLowerCase()===EMAIL_ADMIN.toLowerCase()){
    mostrarPainel(true);
    await carregarLinks();
+   await carregarEstatisticas();
  }else{
    mostrarPainel(false);
    if(user) await db.auth.signOut();
@@ -128,6 +158,7 @@ $('loginForm').addEventListener('submit',async e=>{
   mostrarPainel(true);
   msg('Login realizado com sucesso.');
   await carregarLinks();
+  await carregarEstatisticas();
  }catch(e){
   msg(e.message==='Esta conta não é a conta autorizada.'
    ?e.message:'Não foi possível entrar. Confira o e-mail e a senha.');
@@ -172,6 +203,76 @@ async function carregarLinks(){
   item.append(titulo,info,descricao,abrir,document.createElement('br'),editar,alternar,excluir);
   $('lista').append(item);
  });
+}
+
+async function carregarEstatisticas(){
+ $('totalCliques').textContent='…';
+ $('maisAcessado').textContent='…';
+ $('listaCliques').textContent='Carregando...';
+ $('msgCliques').textContent='';
+
+ try{
+  const {data:links,error:erroLinks}=await db
+   .from('links')
+   .select('id,titulo');
+
+  if(erroLinks) throw erroLinks;
+
+  const {data:cliques,error:erroCliques}=await db
+   .from('link_clicks')
+   .select('link_id');
+
+  if(erroCliques) throw erroCliques;
+
+  const contagem={};
+  (cliques||[]).forEach(c=>{
+   contagem[c.link_id]=(contagem[c.link_id]||0)+1;
+  });
+
+  const total=(cliques||[]).length;
+  $('totalCliques').textContent=total.toLocaleString('pt-BR');
+
+  const ordenados=(links||[]).map(link=>({
+   id:link.id,
+   titulo:link.titulo,
+   cliques:contagem[link.id]||0
+  })).sort((a,b)=>b.cliques-a.cliques);
+
+  const primeiro=ordenados[0];
+  $('maisAcessado').textContent=
+   primeiro && primeiro.cliques>0 ? primeiro.titulo : 'Nenhum ainda';
+
+  $('listaCliques').replaceChildren();
+
+  if(!ordenados.length){
+   $('listaCliques').textContent='Nenhum link cadastrado.';
+   return;
+  }
+
+  ordenados.forEach(link=>{
+   const linha=document.createElement('div');
+   linha.className='click-row';
+
+   const nome=document.createElement('span');
+   nome.textContent=link.titulo;
+
+   const numero=document.createElement('span');
+   numero.className='click-count';
+   numero.textContent=link.cliques.toLocaleString('pt-BR');
+
+   linha.append(nome,numero);
+   $('listaCliques').append(linha);
+  });
+
+  $('msgCliques').textContent='Estatísticas atualizadas.';
+ }catch(e){
+  $('totalCliques').textContent='—';
+  $('maisAcessado').textContent='—';
+  $('listaCliques').textContent='Não foi possível carregar os cliques.';
+  $('msgCliques').textContent=
+   'Verifique a conexão e as permissões de leitura da tabela link_clicks.';
+  console.error('Erro nas estatísticas:',e);
+ }
 }
 
 function prepararEdicao(link){
@@ -225,6 +326,7 @@ $('linkForm').addEventListener('submit',async e=>{
   msg(editando?'Link atualizado!':'Link cadastrado!');
   limparFormulario();
   await carregarLinks();
+  await carregarEstatisticas();
  }catch(e){
   msg('Não foi possível salvar. Verifique as permissões do Supabase. '+e.message);
  }finally{$('salvarBtn').disabled=false}
@@ -235,6 +337,7 @@ async function alternarAtivo(link){
  if(error){msg('Erro ao alterar o link: '+error.message);return}
  msg('Estado do link atualizado.');
  await carregarLinks();
+ await carregarEstatisticas();
 }
 
 async function excluirLink(link){
@@ -243,15 +346,19 @@ async function excluirLink(link){
  if(error){msg('Erro ao excluir: '+error.message);return}
  msg('Link excluído.');
  await carregarLinks();
+ await carregarEstatisticas();
 }
 
 $('atualizarBtn').onclick=carregarLinks;
+$('atualizarCliques').onclick=carregarEstatisticas;
+
 $('sairBtn').onclick=async()=>{
  await db.auth.signOut();
  mostrarPainel(false);
  limparFormulario();
  msg('Você saiu do painel.');
 };
+
 db.auth.onAuthStateChange(()=>{});
 verificarSessao();
 </script>
